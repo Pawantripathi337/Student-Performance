@@ -1,0 +1,50 @@
+<div class="row g-4">
+  <div class="col-lg-5">
+    <div class="result-card">
+      <div class="text-muted small">Predicted final score</div>
+      <div class="result-score">{{ record.predicted_score }}%</div>
+      <div class="d-flex flex-wrap gap-2 mb-3">
+        <span class="badge-soft cat-{{ record.category|slugify }}">{{ record.category }}</span>
+        <span class="badge-soft risk-{{ record.risk_level|lower }}">{{ record.risk_level }} risk</span>
+      </div>
+      <p class="mb-2">{{ record.explanation }}</p>
+      {% if record.pass_probability is not None %}
+      <div class="small text-muted">Estimated chance of passing (≥ 50%): <strong>{{ record.pass_probability }}%</strong> (Logistic Regression)</div>
+      {% endif %}
+    </div>
+    <div class="result-card mt-4">
+      <h6>Why this risk level?</h6>
+      {% if reasons %}<ul class="mb-0">{% for r in reasons %}<li>{{ r|capfirst }}</li>{% endfor %}</ul>
+      {% else %}<p class="mb-0">No risk factors were triggered.</p>{% endif %}
+      <p class="small text-muted mt-3 mb-0">The risk level is a simple rule-based indicator for learning purposes, not a validated or professional assessment.</p>
+    </div>
+  </div>
+  <div class="col-lg-7">
+    <div class="result-card"><div id="chart-gauge" class="chart"></div></div>
+    <div class="result-card mt-4"><div id="chart-compare" class="chart"></div></div>
+  </div>
+</div>
+
+<div class="row g-4 mt-1">
+  <div class="col-lg-6">
+    <div class="result-card h-100">
+      <h6>Improvement suggestions</h6>
+      <ul class="tips">{% for t in tips %}<li>{{ t }}</li>{% endfor %}</ul>
+    </div>
+  </div>
+  <div class="col-lg-6">
+    <div class="result-card h-100">
+      <h6>Input features</h6>
+      <table class="table table-sm mb-0">
+        <tr><th>Name</th><td>{{ record.student_name }}</td><th>Age</th><td>{{ record.age }}</td></tr>
+        <tr><th>Gender</th><td>{{ record.sex }}</td><th>Study time</th><td>{{ study_label }}</td></tr>
+        <tr><th>Period 1 marks</th><td>{{ record.g1 }}/20</td><th>Period 2 marks</th><td>{{ record.g2 }}/20</td></tr>
+        <tr><th>Failures</th><td>{{ record.failures }}</td><th>Absences</th><td>{{ record.absences }}</td></tr>
+        <tr><th>School support</th><td>{{ record.schoolsup|capfirst }}</td><th>Family support</th><td>{{ record.famsup|capfirst }}</td></tr>
+        <tr><th>Activities</th><td>{{ record.activities|capfirst }}</td><th>Internet</th><td>{{ record.internet|capfirst }}</td></tr>
+        <tr><th>Free time</th><td>{{ record.freetime }}/5</td><th>Going out</th><td>{{ record.goout }}/5</td></tr>
+      </table>
+    </div>
+  </div>
+</div>
+{{ charts|json_script:"charts-data" }}

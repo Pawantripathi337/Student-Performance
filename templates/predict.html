@@ -1,0 +1,42 @@
+{% extends 'base.html' %}
+{% block title %}Predict{% endblock %}
+{% block content %}
+<section class="page-head"><div class="container"><h1>Predict student performance</h1><p>Fill in the details below. All marks are out of 20, as in the training dataset.</p></div></section>
+<div class="container pb-5">
+  <form method="post" novalidate class="form-card">
+    {% csrf_token %}
+    {% if form.non_field_errors %}<div class="alert alert-danger">{{ form.non_field_errors }}</div>{% endif %}
+
+    <h5 class="form-section">Student</h5>
+    <div class="row g-3">
+      <div class="col-md-6">{% include 'partials/field.html' with field=form.student_name %}</div>
+      <div class="col-md-3">{% include 'partials/field.html' with field=form.age %}</div>
+      <div class="col-md-3">{% include 'partials/field.html' with field=form.sex %}</div>
+    </div>
+
+    <h5 class="form-section">Academic record</h5>
+    <div class="row g-3">
+      <div class="col-md-3">{% include 'partials/field.html' with field=form.g1 %}</div>
+      <div class="col-md-3">{% include 'partials/field.html' with field=form.g2 %}</div>
+      <div class="col-md-3">{% include 'partials/field.html' with field=form.failures %}</div>
+      <div class="col-md-3">{% include 'partials/field.html' with field=form.absences %}</div>
+    </div>
+
+    <h5 class="form-section">Study habits &amp; support</h5>
+    <div class="row g-3">
+      <div class="col-md-4">{% include 'partials/field.html' with field=form.studytime %}</div>
+      <div class="col-md-4">{% include 'partials/field.html' with field=form.schoolsup %}</div>
+      <div class="col-md-4">{% include 'partials/field.html' with field=form.famsup %}</div>
+      <div class="col-md-3">{% include 'partials/field.html' with field=form.activities %}</div>
+      <div class="col-md-3">{% include 'partials/field.html' with field=form.internet %}</div>
+      <div class="col-md-3">{% include 'partials/field.html' with field=form.freetime %}</div>
+      <div class="col-md-3">{% include 'partials/field.html' with field=form.goout %}</div>
+    </div>
+
+    <div class="d-flex flex-wrap gap-2 mt-4">
+      <button type="submit" class="btn btn-primary btn-lg px-5">Predict</button>
+      <a href="{% url 'predict' %}" class="btn btn-outline-secondary btn-lg">Reset</a>
+    </div>
+  </form>
+</div>
+{% endblock %}

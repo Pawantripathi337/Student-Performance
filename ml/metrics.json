@@ -1,0 +1,122 @@
+{
+  "dataset": {
+    "source": "Synthetic demo data (UCI-style columns)",
+    "synthetic": true,
+    "rows": 600,
+    "columns": 14,
+    "features": [
+      "age",
+      "studytime",
+      "failures",
+      "absences",
+      "G1",
+      "G2",
+      "freetime",
+      "goout",
+      "sex",
+      "schoolsup",
+      "famsup",
+      "activities",
+      "internet"
+    ],
+    "target": "G3"
+  },
+  "split": {
+    "train": 480,
+    "test": 120,
+    "test_size": 0.2,
+    "random_state": 42
+  },
+  "models": [
+    {
+      "name": "Linear Regression",
+      "mae": 0.9436,
+      "mse": 1.373,
+      "rmse": 1.1717,
+      "r2": 0.9045
+    },
+    {
+      "name": "Decision Tree",
+      "mae": 1.0727,
+      "mse": 1.7074,
+      "rmse": 1.3067,
+      "r2": 0.8812
+    },
+    {
+      "name": "Random Forest",
+      "mae": 1.0389,
+      "mse": 1.6213,
+      "rmse": 1.2733,
+      "r2": 0.8872
+    }
+  ],
+  "best_model": "Linear Regression",
+  "without_grades": [
+    {
+      "name": "Linear Regression",
+      "mae": 2.8607,
+      "mse": 12.629,
+      "rmse": 3.5537,
+      "r2": 0.1216
+    },
+    {
+      "name": "Decision Tree",
+      "mae": 3.0994,
+      "mse": 14.7862,
+      "rmse": 3.8453,
+      "r2": -0.0284
+    },
+    {
+      "name": "Random Forest",
+      "mae": 3.008,
+      "mse": 13.5846,
+      "rmse": 3.6857,
+      "r2": 0.0551
+    }
+  ],
+  "classifier": {
+    "name": "Logistic Regression (pass/fail)",
+    "accuracy": 0.9083,
+    "precision": 0.9565,
+    "recall": 0.8919,
+    "f1": 0.9231
+  },
+  "feature_importance": [
+    {
+      "feature": "G2",
+      "importance": 0.8758
+    },
+    {
+      "feature": "G1",
+      "importance": 0.042
+    },
+    {
+      "feature": "absences",
+      "importance": 0.0189
+    },
+    {
+      "feature": "studytime",
+      "importance": 0.0113
+    },
+    {
+      "feature": "goout",
+      "importance": 0.0112
+    },
+    {
+      "feature": "age",
+      "importance": 0.011
+    },
+    {
+      "feature": "freetime",
+      "importance": 0.0096
+    },
+    {
+      "feature": "failures",
+      "importance": 0.0041
+    }
+  ],
+  "trained_with": {
+    "sklearn": "1.8.0",
+    "trained_at": "2026-10-05 08:49"
+  }
+}

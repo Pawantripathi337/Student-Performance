@@ -1,0 +1,14 @@
+{% extends 'base.html' %}
+{% block title %}{{ record.student_name }}{% endblock %}
+{% block content %}
+<section class="page-head"><div class="container">
+  <a href="{% url 'students' %}" class="back-link">← All records</a>
+  <h1>{{ record.student_name }}</h1><p>Predicted {{ record.created_at|date:"d M Y, H:i" }}</p>
+</div></section>
+<div class="container pb-5">
+  {% include 'partials/detail_body.html' %}
+  <form method="post" action="{% url 'student_delete' record.pk %}" class="mt-4" onsubmit="return confirm('Delete this record?');">
+    {% csrf_token %}<button class="btn btn-outline-danger btn-sm">Delete record</button>
+  </form>
+</div>
+{% endblock %}

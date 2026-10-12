@@ -1,0 +1,50 @@
+{% extends 'base.html' %}
+{% block title %}Dashboard{% endblock %}
+{% block content %}
+<section class="page-head"><div class="container"><h1>Academic analytics dashboard</h1>
+  <p>Statistics and charts computed from the training dataset{% if metrics.dataset.synthetic %} (synthetic demo data){% endif %}.</p></div></section>
+<div class="container pb-5">
+{% if stats %}
+  <div class="row g-3">
+    <div class="col-6 col-lg-3"><div class="stat-card"><div class="stat-value">{{ stats.total }}</div><div class="stat-label">Total students</div></div></div>
+    <div class="col-6 col-lg-3"><div class="stat-card"><div class="stat-value">{{ stats.average }}%</div><div class="stat-label">Average marks</div></div></div>
+    <div class="col-6 col-lg-3"><div class="stat-card"><div class="stat-value">{{ stats.highest }}%</div><div class="stat-label">Highest marks</div></div></div>
+    <div class="col-6 col-lg-3"><div class="stat-card"><div class="stat-value">{{ stats.lowest }}%</div><div class="stat-label">Lowest marks</div></div></div>
+    <div class="col-6 col-lg-3"><div class="stat-card"><div class="stat-value">{{ stats.avg_absences }}</div><div class="stat-label">Average absences</div></div></div>
+    <div class="col-6 col-lg-3"><div class="stat-card stat-high"><div class="stat-value">{{ stats.high }}</div><div class="stat-label">High risk</div></div></div>
+    <div class="col-6 col-lg-3"><div class="stat-card stat-medium"><div class="stat-value">{{ stats.medium }}</div><div class="stat-label">Medium risk</div></div></div>
+    <div class="col-6 col-lg-3"><div class="stat-card stat-low"><div class="stat-value">{{ stats.low }}</div><div class="stat-label">Low risk</div></div></div>
+  </div>
+
+  <div class="row g-4 mt-1">
+    <div class="col-lg-6"><div class="result-card"><div id="chart-marks_hist" class="chart"></div></div></div>
+    <div class="col-lg-6"><div class="result-card"><div id="chart-absences_scatter" class="chart"></div></div></div>
+    <div class="col-lg-4"><div class="result-card"><div id="chart-study_bar" class="chart"></div></div></div>
+    <div class="col-lg-4"><div class="result-card"><div id="chart-category_bar" class="chart"></div></div></div>
+    <div class="col-lg-4"><div class="result-card"><div id="chart-risk_pie" class="chart"></div></div></div>
+  </div>
+
+  {% if metrics %}
+  <div class="row g-4 mt-1">
+    <div class="col-lg-5"><div class="result-card"><div id="chart-model_bar" class="chart"></div></div></div>
+    <div class="col-lg-7">
+      <div class="result-card h-100">
+        <h6>Model comparison (test set, errors in grade points out of 20)</h6>
+        <div class="table-responsive"><table class="table align-middle mb-2">
+          <thead><tr><th>Model</th><th>MAE</th><th>MSE</th><th>RMSE</th><th>R²</th></tr></thead>
+          <tbody>{% for m in metrics.models %}
+            <tr {% if m.name == metrics.best_model %}class="table-success"{% endif %}><td>{{ m.name }}{% if m.name == metrics.best_model %} <span class="badge text-bg-success">best</span>{% endif %}</td><td>{{ m.mae }}</td><td>{{ m.mse }}</td><td>{{ m.rmse }}</td><td>{{ m.r2 }}</td></tr>
+          {% endfor %}</tbody></table></div>
+        <p class="small text-muted mb-0">Best model = lowest RMSE on {{ metrics.split.test }} held-out students (trained on {{ metrics.split.train }}). Pass/fail classifier accuracy: {{ metrics.classifier.accuracy }}.</p>
+      </div>
+    </div>
+  </div>
+  {% endif %}
+
+  <p class="small text-muted mt-4">Saved predictions: <strong>{{ records_count }}</strong>{% if records_avg %} · average predicted score <strong>{{ records_avg|floatformat:1 }}%</strong>{% endif %}. Risk counts above apply the same rules to each student's actual final grade.</p>
+  {{ charts|json_script:"charts-data" }}
+{% else %}
+  <div class="result-card text-center py-5"><h5>Analytics are not available</h5><p class="text-muted mb-0">Check that <code>ml/dataset.csv</code> exists, then reload.</p></div>
+{% endif %}
+</div>
+{% endblock %}

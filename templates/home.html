@@ -1,0 +1,61 @@
+{% extends 'base.html' %}
+{% block title %}Home{% endblock %}
+{% block content %}
+<section class="hero">
+  <div class="container">
+    <div class="row align-items-center g-4">
+      <div class="col-lg-7">
+        <span class="pill">Machine Learning · Academic Analytics</span>
+        <h1 class="hero-title">Smart Student Performance Prediction &amp; Academic Analytics System</h1>
+        <p class="hero-sub">Enter a student's academic details and get a predicted final score, a performance category, an explainable risk level and personalised improvement tips, powered by supervised regression models.</p>
+        <div class="d-flex flex-wrap gap-2 mt-4">
+          <a href="{% url 'predict' %}" class="btn btn-light btn-lg px-4 fw-semibold">Predict Performance</a>
+          <a href="{% url 'dashboard' %}" class="btn btn-outline-light btn-lg px-4">View Analytics</a>
+        </div>
+      </div>
+      <div class="col-lg-5">
+        <div class="hero-card">
+          <div class="small text-uppercase opacity-75 mb-2">Sample output</div>
+          <div class="hero-score">82.5%</div>
+          <div class="d-flex gap-2 mt-2"><span class="badge-soft cat-good">Good</span><span class="badge-soft risk-low">Low risk</span></div>
+          <hr class="border-light opacity-25">
+          <div class="small opacity-75">Illustration of the result layout, not a real prediction.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="container stat-strip">
+  <div class="row g-3">
+    {% if stats %}
+    <div class="col-6 col-lg-3"><div class="stat-card"><div class="stat-value">{{ stats.rows }}</div><div class="stat-label">Training records</div></div></div>
+    <div class="col-6 col-lg-3"><div class="stat-card"><div class="stat-value">{{ stats.features }}</div><div class="stat-label">Input features</div></div></div>
+    <div class="col-6 col-lg-3"><div class="stat-card"><div class="stat-value">{{ stats.models }}</div><div class="stat-label">Models compared</div></div></div>
+    <div class="col-6 col-lg-3"><div class="stat-card"><div class="stat-value">{{ stats.best_r2 }}</div><div class="stat-label">R² of best model ({{ stats.best_model }})</div></div></div>
+    {% else %}
+    <div class="col-12"><div class="stat-card text-center text-muted">Model statistics are unavailable. Run <code>python ml/train_model.py</code>.</div></div>
+    {% endif %}
+  </div>
+  {% if stats.synthetic %}<p class="small text-muted mt-2 mb-0">⚠ These statistics come from the bundled synthetic demo dataset. See the README to use the real UCI dataset.</p>{% endif %}
+</section>
+
+<section class="container section">
+  <h2 class="section-title">How the system works</h2>
+  <div class="row g-4">
+    <div class="col-md-4"><div class="feature-card"><div class="feature-num">1</div><h5>Learn from data</h5><p>Supervised learning: models learn the relationship between student features (marks, absences, study time…) and the known final grade.</p></div></div>
+    <div class="col-md-4"><div class="feature-card"><div class="feature-num">2</div><h5>Compare models</h5><p>Linear Regression, Decision Tree and Random Forest are trained and scored with MAE, MSE, RMSE and R². The best one is selected automatically.</p></div></div>
+    <div class="col-md-4"><div class="feature-card"><div class="feature-num">3</div><h5>Explain the result</h5><p>The score is mapped to a category and a rule-based risk level, with plain-English reasons and recommendations.</p></div></div>
+  </div>
+</section>
+
+<section class="container section pb-5">
+  <h2 class="section-title">What you can do</h2>
+  <div class="row g-4">
+    <div class="col-md-6 col-lg-3"><a class="tile" href="{% url 'predict' %}"><h6>Predict</h6><p>Score, category and risk for one student.</p></a></div>
+    <div class="col-md-6 col-lg-3"><a class="tile" href="{% url 'dashboard' %}"><h6>Analytics</h6><p>Charts, statistics and model comparison.</p></a></div>
+    <div class="col-md-6 col-lg-3"><a class="tile" href="{% url 'students' %}"><h6>Records ({{ records_count }})</h6><p>Search, filter and sort past predictions.</p></a></div>
+    <div class="col-md-6 col-lg-3"><a class="tile" href="/admin/"><h6>Admin</h6><p>Manage stored records in Django Admin.</p></a></div>
+  </div>
+</section>
+{% endblock %}

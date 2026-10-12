@@ -1,0 +1,14 @@
+{% extends 'base.html' %}
+{% block title %}Result{% endblock %}
+{% block content %}
+<section class="page-head"><div class="container">
+  <h1>Prediction for {{ record.student_name }}</h1><p>Saved {{ record.created_at|date:"d M Y, H:i" }}</p>
+</div></section>
+<div class="container pb-5">
+  {% include 'partials/detail_body.html' %}
+  <div class="d-flex flex-wrap gap-2 mt-4">
+    <a href="{% url 'predict' %}" class="btn btn-primary">Predict another student</a>
+    <a href="{% url 'students' %}" class="btn btn-outline-secondary">View all records</a>
+  </div>
+</div>
+{% endblock %}
